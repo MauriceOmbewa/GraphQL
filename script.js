@@ -177,3 +177,27 @@ function displayUserData(user, transactions) {
         document.getElementById('current-progress').textContent = 'No progress data';
     }
 }
+
+// Function to display statistics
+function displayStats(transactions, progress, results) {
+    const statsDiv = document.getElementById('stats-details');
+    statsDiv.innerHTML = '';
+    
+    // Calculate pass/fail ratio
+    const passCount = progress.filter(p => p.grade === 1).length;
+    const failCount = progress.filter(p => p.grade === 0).length;
+    
+    const passRatio = passCount / (passCount + failCount) * 100 || 0;
+    
+    // Create stats display
+    const statsHtml = `
+        <div class="stat-item">
+            <p><strong>Total XP Entries:</strong> ${transactions.length}</p>
+            <p><strong>Total Projects Attempted:</strong> ${progress.length}</p>
+            <p><strong>Pass Rate:</strong> ${passRatio.toFixed(1)}%</p>
+            <p><strong>PASS:</strong> ${passCount} | <strong>FAIL:</strong> ${failCount}</p>
+        </div>
+    `;
+    
+    statsDiv.innerHTML = statsHtml;
+}
