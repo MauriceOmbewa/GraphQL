@@ -201,3 +201,34 @@ function displayStats(transactions, progress, results) {
     
     statsDiv.innerHTML = statsHtml;
 }
+
+// Process XP data for the line graph
+function processXpOverTimeData(transactions) {
+    if (!transactions || transactions.length === 0) return [];
+    
+    // Sort transactions by date
+    const sortedTx = [...transactions].sort((a, b) => 
+        new Date(a.createdAt) - new Date(b.createdAt));
+    
+    // Group by month
+    const monthlyXP = {};
+    let cumulativeXP = 0;
+    
+    sortedTx.forEach(tx => {
+        const date = new Date(tx.createdAt);
+        const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
+        
+        if (!monthlyXP[monthYear]) {
+            monthlyXP[monthYear] = 0;
+        }
+        
+        monthlyXP[monthYear] += tx.amount;
+        cumulativeXP += tx.amount;
+    });
+    
+    // Convert to array format for graph
+    return Object.entries(monthlyXP).map(([date, xp]) => ({
+        date,
+        xp
+    }));
+}
