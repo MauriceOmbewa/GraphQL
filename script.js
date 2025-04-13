@@ -232,3 +232,42 @@ function processXpOverTimeData(transactions) {
         xp
     }));
 }
+
+// Process grades data for the bar chart
+function processGradesData(progress, results) {
+    if (!progress || progress.length === 0) return [];
+    
+    // Group projects by path
+    const projectGroups = {};
+    
+    progress.forEach(proj => {
+        // Extract project category from path
+        const pathParts = proj.path.split('/');
+        const category = pathParts.length > 1 ? pathParts[pathParts.length - 2] : 'Other';
+        
+        if (!projectGroups[category]) {
+            projectGroups[category] = {
+                pass: 0,
+                fail: 0,
+                total: 0
+            };
+        }
+        
+        projectGroups[category].total++;
+        if (proj.grade === 1) {
+            projectGroups[category].pass++;
+        } else {
+            projectGroups[category].fail++;
+        }
+    });
+    
+    // Convert to array format for graph
+    return Object.entries(projectGroups)
+        .filter(([category]) => category !== 'Other' && category !== '')
+        .map(([category, data]) => ({
+            label: category,
+            pass: data.pass,
+            fail: data.fail,
+            passRate: data.total > 0 ? (data.pass / data.total) * 100 : 0
+        }));
+}
