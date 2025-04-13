@@ -51,3 +51,10 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         console.error("Login error:", error);
     }
 });
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('userId');
+    document.getElementById('login-page').style.display = 'block';
+    document.getElementById('profile-page').style.display = 'none';
+});
