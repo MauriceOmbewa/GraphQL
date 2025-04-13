@@ -152,3 +152,28 @@ async function loadProfileData(token) {
         console.error("GraphQL error:", error);
     }
 }
+
+// Function to update the UI with user data
+function displayUserData(user, transactions) {
+    if (!user) {
+        document.getElementById('user-name').textContent = 'User data not available';
+        return;
+    }
+    
+    document.getElementById('user-name').textContent = user.login || 'Unknown';
+    document.getElementById('user-email').textContent = user.login + '@01.kzc.io';
+    
+    // Calculate total XP
+    const totalXP = transactions.reduce((sum, t) => sum + t.amount, 0);
+    document.getElementById('total-xp').textContent = totalXP.toLocaleString();
+    
+    // Set current progress based on most recent transaction
+    if (transactions.length > 0) {
+        const sortedTx = [...transactions].sort((a, b) => 
+            new Date(b.createdAt) - new Date(a.createdAt));
+        document.getElementById('current-progress').textContent = 
+            sortedTx[0].path.split('/').pop() || 'Unknown';
+    } else {
+        document.getElementById('current-progress').textContent = 'No progress data';
+    }
+}
