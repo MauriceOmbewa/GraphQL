@@ -58,3 +58,97 @@ document.getElementById('logout-btn').addEventListener('click', () => {
     document.getElementById('login-page').style.display = 'block';
     document.getElementById('profile-page').style.display = 'none';
 });
+
+// Function to fetch profile data using GraphQL with proper queries
+async function loadProfileData(token) {
+    // Get userId from localStorage
+    const userId = localStorage.getItem('userId');
+    
+    // This query includes:
+    // - Normal query (user table)
+    // - Nested query (user -> transactions)
+    // - Query with arguments (filtering by userId)
+    const query = `
+        {
+            # Normal query for user info
+            user {
+                id
+                login
+            }
+            
+            # Nested query with arguments for XP transactions
+            transaction(where: {userId: {_eq: ${userId}}, type: {_eq: "xp"}}) {
+                id
+                amount
+                createdAt
+                path
+                object {
+                    name
+                    type
+                }
+            }
+            
+            # Query with arguments for progress data
+            progress(where: {userId: {_eq: ${userId}}}) {
+                id
+                grade
+                createdAt
+                path
+                object {
+                    id
+                    name
+                    type
+                }
+            }
+            
+            # Query with arguments for result data
+            result(where: {userId: {_eq: ${userId}}}) {
+                id
+                grade
+                createdAt
+                path
+            }
+        }
+    `;
+
+    try {
+        const response = await fetch(GRAPHQL_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ query })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch profile data');
+        }
+        
+        const result = await response.json();
+        
+        if (result.errors) {
+            throw new Error(result.errors.map(err => err.message).join(', '));
+        }
+        
+        const { user, transaction, progress, result: resultData } = result.data;
+        
+        // Display user data
+        displayUserData(user[0], transaction);
+        
+        // Process data for graphs
+        const xpOverTimeData = processXpOverTimeData(transaction);
+        const gradesData = processGradesData(progress, resultData);
+        
+        // Draw graphs
+        drawLineGraph(xpOverTimeData);
+        drawBarChart(gradesData);
+        
+        // Display stats summary
+        displayStats(transaction, progress, resultData);
+        
+    } catch (error) {
+        document.getElementById('stats-details').textContent = `Error loading data: ${error.message}`;
+        console.error("GraphQL error:", error);
+    }
+}
