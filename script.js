@@ -609,3 +609,13 @@ function drawBarChart(data) {
     legendText.textContent = 'Pass Rate';
     svg.appendChild(legendText);
 }
+
+// Check for a stored JWT on page load
+window.addEventListener('load', () => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('profile-page').style.display = 'block';
+        loadProfileData(token);
+    }
+});
