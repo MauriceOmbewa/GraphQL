@@ -1,62 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GraphQL</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>User Profile Page</title>
+  <link rel="stylesheet" href="style.css"> <!-- ✅ Linked CSS -->
 </head>
 <body>
-    <div id="login-page">
-        <h2>Login</h2>
-        <div id="login-error" class="error"></div>
-        <form id="login-form">
-          <div class="form-field">
-            <label for="identifier">Username or Email:</label>
-            <input type="text" id="identifier" name="identifier" required>
-          </div>
-          <div class="form-field">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-          </div>
-          <button type="submit">Sign In</button>
-        </form>
-    </div>
+  <!-- Login Page -->
+  <div id="login-page">
+    <h2>Login</h2>
+    <div id="login-error" class="error"></div>
+    <form id="login-form">
+      <div class="form-field">
+        <label for="identifier">Username or Email:</label>
+        <input type="text" id="identifier" name="identifier" required>
+      </div>
+      <div class="form-field">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">Sign In</button>
+    </form>
+  </div>
 
-    <div id="profile-page" style="display:none;">
-        <button id="logout-btn">Logout</button>
-        <h2>Welcome, <span id="user-name"></span></h2>
+  <!-- Profile Page -->
+  <div id="profile-page" style="display:none;">
+    <button id="logout-btn">Logout</button>
+    <h2>Welcome, <span id="user-name"></span></h2>
 
-        <div class="section" id="user-info">
-            <h3>User Info</h3>
-            <p>Email: <span id="user-email"></span></p>
-        </div>
-    </div>
-
-    <div class="section" id="xp-section">
+    <div id="user-details" class="user-details">
+      <!-- df -->
+      <div class="section" id="user-info">
+        <h3>User Info</h3>
+        <p>Email: <span id="user-email"></span></p>
+      </div>
+  
+      <div class="section" id="xp-section">
         <h3>Experience Points</h3>
         <p>Total XP: <span id="total-xp"></span></p>
-    </div>
-
-    <div class="section" id="progress-section">
+      </div>
+  
+      <div class="section" id="progress-section">
         <h3>Progress/Grades</h3>
-        <p>Current Progress: <span id="current-progress"></span></p>
-    </div>
-
-    <div class="section" id="stats-section">
+        <p>Recent activity: <span id="current-progress"></span></p>
+      </div>
+  
+      <div class="section" id="stats-section">
         <h3>Statistics</h3>
         <div id="stats-details"></div>
-    </div>
-
-    <div class="section" id="graphs-section">
-        <h3>Graphs</h3>
-        <h4>XP Over Time (Line Graph)</h4>
-        <svg id="line-graph"></svg>
-        <h4>Progress/Grades (Bar Chart)</h4>
-        <svg id="bar-chart"></svg>
       </div>
     </div>
 
-    <script src="script.js"></script>    
+
+
+    <h3>Graphs</h3>
+    <!-- <h4>XP Over Time (Line Graph)</h4> -->
+    <div class="section" id="graphs-section">
+      <div class="line-graph-container" id="line-graph-container">
+        <h4>XP Over Time (Line Graph)</h4>
+        <svg id="line-graph"></svg>
+      </div>
+      
+      <!-- <div></div> -->
+      <!-- <svg id="line-graph"></svg> -->
+      <div class="bar-graph-chart" id="bar-graph-chart">
+        <h4>Progress/Grades (Bar Chart)</h4>
+        <!-- Charts will be injected here -->
+        <svg id="bar-chart"></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- <h3>Graphs</h3>
+  <h4>XP Over Time (Line Graph)</h4>
+  <svg id="line-graph"></svg>
+  <h4>Progress/Grades (Bar Chart)</h4>
+  <svg id="bar-chart"></svg> -->
+
+  <script src="script.js"></script> <!-- ✅ Linked JavaScript -->
 </body>
 </html>
