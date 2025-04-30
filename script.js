@@ -75,6 +75,7 @@ async function loadProfileData(token) {
             user {
                 id
                 login
+                email
             }
             
             # Nested query with arguments for XP transactions
@@ -163,7 +164,7 @@ function displayUserData(user, transactions) {
     }
     
     document.getElementById('user-name').textContent = user.login || 'Unknown';
-    document.getElementById('user-email').textContent = user.login + '@01.kzc.io';
+    document.getElementById('user-email').textContent = user.email;
     
     // Calculate total XP
     const totalXP = transactions.reduce((sum, t) => sum + t.amount, 0);
