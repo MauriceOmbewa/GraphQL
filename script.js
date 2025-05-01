@@ -652,3 +652,26 @@ window.addEventListener("load", () => {
     loadProfileData(token);
   }
 });
+
+
+function displayPendingProjects(items) {
+    const ul = document.getElementById("pending-projects");
+    ul.innerHTML = ""; // wipe out any existing <li>s
+  
+    items.forEach(item => {
+      const li = document.createElement("li");
+  
+      // Extract a human-friendly project name from the path
+      const name = item.path.split("/").pop().replace(/-/g, " ");
+      // Format the start date (you can tweak locale/options)
+      const date = new Date(item.createdAt)
+        .toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  
+      li.innerHTML = `
+        <span class="project-name">${name}</span>
+        <span class="start-date">Started: ${date}</span>
+      `;
+      ul.appendChild(li);
+    });
+  }
+  
