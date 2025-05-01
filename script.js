@@ -70,44 +70,66 @@ async function loadProfileData(token) {
   // - Nested query (user -> transactions)
   // - Query with arguments (filtering by userId)
   const query = `
-        {
-            # Normal query for user info
-            user {
-                id
-                login
-                email
-            }
-            
-            # Nested query with arguments for XP transactions
-            transaction(where: { _and: [ { type: { _eq: "xp" } }, { eventId: { _eq: 75 } } ] }) {
-                path
-                amount
-                type
-                createdAt
-            }
-            
-            # Query with arguments for progress data
-            progress(where: {userId: {_eq: ${userId}} id: {_neq: 145124}} order_by: {createdAt: asc}) {
-                id
-                grade
-                createdAt
-                path
-                object {
-                    id
-                    name
-                    type
-                }
-            }
-            
-            # Query with arguments for result data
-            result(where: {userId: {_eq: ${userId}}}) {
-                id
-                grade
-                createdAt
-                path
-            }
-        }
-    `;
+  {
+    user {
+      id
+      login
+      email
+    }
+
+    transaction(
+      where: {
+        _and: [
+          { type: { _eq: "xp" } },
+          { eventId: { _eq: 75 } }
+        ]
+      }
+    ) {
+      path
+      amount
+      type
+      createdAt
+    }
+
+    progress(
+      where: {
+        userId: { _eq: ${userId} },
+        id: { _neq: 145124 }
+      },
+      order_by: { createdAt: asc }
+    ) {
+      id
+      grade
+      createdAt
+      path
+      object {
+        id
+        name
+        type
+      }
+    }
+
+    result(where: { userId: { _eq: ${userId} } }) {
+      id
+      grade
+      createdAt
+      path
+    }
+
+    # ← your new “pending” query
+    pendingProgress: progress(
+      where: {
+        isDone: { _eq: false },
+        eventId: { _eq: 75 },
+        id: { _neq: 145124 }
+      }
+    ) {
+      createdAt
+      path
+    }
+  }
+`;
+
 
   try {
     const response = await fetch(GRAPHQL_ENDPOINT, {
@@ -129,7 +151,7 @@ async function loadProfileData(token) {
       throw new Error(result.errors.map((err) => err.message).join(", "));
     }
 
-    const { user, transaction, progress, result: resultData } = result.data;
+    const { user, transaction, progress, result: resultData, pendingProgress } = result.data;
 
     // Display user data
     displayUserData(user[0], transaction);
@@ -144,6 +166,8 @@ async function loadProfileData(token) {
 
     // Display stats summary
     displayStats(transaction, progress, resultData);
+
+    displayPendingProjects(pendingProgress);
   } catch (error) {
     document.getElementById(
       "stats-details"
