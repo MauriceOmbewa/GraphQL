@@ -272,3 +272,40 @@ button:hover {
 #login-page, #profile-page {
   animation: fadeIn 0.5s ease forwards;
 }
+
+/* Pending Projects Container */
+#projects-section {
+  height: 200px;               /* fixed height */
+  overflow-y: auto;            /* enable vertical scroll */
+  border: 1px solid #ccc;      /* light border */
+  padding: 10px;               /* inner spacing */
+  margin-bottom: 20px;         /* space below before graphs */
+  background-color: #fafafa;   /* optional bg color */
+}
+
+/* Style the list */
+#pending-projects {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#pending-projects li {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+#pending-projects li:last-child {
+  border-bottom: none;
+}
+
+.project-name {
+  font-weight: 500;
+}
+
+.start-date {
+  font-size: 0.9em;
+  color: #666;
+}
