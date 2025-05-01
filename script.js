@@ -79,12 +79,7 @@ async function loadProfileData(token) {
             }
             
             # Nested query with arguments for XP transactions
-            transaction(where: { 
-                _and: [
-                { type: { _eq: "xp" } },
-                { eventId: { _eq: 75 } }
-                ]
-            }) {
+            transaction(where: { _and: [ { type: { _eq: "xp" } }, { eventId: { _eq: 75 } } ] }) {
                 path
                 amount
                 type
@@ -164,11 +159,20 @@ function displayUserData(user, transactions) {
     }
     
     document.getElementById('user-name').textContent = user.login || 'Unknown';
-    document.getElementById('user-email').textContent = user.email;
+    document.getElementById('user-email').textContent = user.email || 'Unknown';
+    // document.getElementById('user-best-skills').textContent = user.bestSkills || 'Unknown';
     
     // Calculate total XP
     const totalXP = transactions.reduce((sum, t) => sum + t.amount, 0);
-    document.getElementById('total-xp').textContent = totalXP.toLocaleString();
+    let tot = totalXP;
+    if (totalXP >= 1000000) {
+        tot = (totalXP / 1000000).toFixed(2);
+    } else if (totalXP >= 1000) {
+        tot = (totalXP / 1000).toFixed(2);
+    } else {
+        tot = totalXP.toFixed(2);
+    }
+    document.getElementById('total-xp').textContent = tot.toLocaleString()+"MB";
     
     // Set current progress based on most recent transaction
     if (transactions.length > 0) {
