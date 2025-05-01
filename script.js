@@ -342,7 +342,7 @@ function drawLineGraph(data) {
   title.setAttribute("y", 20);
   title.setAttribute("text-anchor", "middle");
   title.setAttribute("font-weight", "bold");
-  title.textContent = "XP Earned Over Time";
+  title.textContent = "XP Earned Over Time (in Kbs)";
   svg.appendChild(title);
 
   // Calculate max XP for scaling
