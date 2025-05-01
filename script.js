@@ -438,7 +438,7 @@ function drawLineGraph(data) {
     label.setAttribute("y", yPos + 5);
     label.setAttribute("text-anchor", "end");
     label.setAttribute("font-size", "12");
-    label.textContent = xpValue;
+    label.textContent = Math.round(xpValue / 1024);
     svg.appendChild(label);
 
     // Grid line (optional)
@@ -583,17 +583,6 @@ function drawBarChart(data) {
     rect.appendChild(tip);
 
     g.appendChild(rect);
-
-    // value label inside bar
-    // if (h > 20) {
-    //   const vt = document.createElementNS(svg.namespaceURI, 'text');
-    //   vt.setAttribute('x', x + barWidth/2);
-    //   vt.setAttribute('y', y + 15);
-    //   vt.setAttribute('text-anchor', 'middle');
-    //   vt.setAttribute('class', 'bar-value');
-    // //   vt.textContent = `${d.passRate.toFixed(0)}%`;
-    //   g.appendChild(vt);
-    // }
 
     // category label
     const ct = document.createElementNS(svg.namespaceURI, "text");
